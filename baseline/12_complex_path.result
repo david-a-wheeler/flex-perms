@@ -1,0 +1,33 @@
+test_name: 12_complex_path
+exit_code: 0
+stdout_start
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "allow",
+    "permissionDecisionReason": "flex-perms: Request permitted by allow rule - matched rule: GitHub URLs are safe to access. configtest/flex-perms/allow/WebFetch/github.tool_input.url.rule - clause 1 (tool_input.url:https://github.com/anthropic/claude)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://github.com/anthropic/claude",
+      "nested": {
+        "deep": "value"
+      }
+    }
+  },
+  "response": {
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "allow",
+      "permissionDecisionReason": "flex-perms: Request permitted by allow rule - matched rule: GitHub URLs are safe to access. configtest/flex-perms/allow/WebFetch/github.tool_input.url.rule - clause 1 (tool_input.url:https://github.com/anthropic/claude)"
+    }
+  }
+}
+log_end

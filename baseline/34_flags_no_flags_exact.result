@@ -1,0 +1,34 @@
+test_name: 34_flags_no_flags_exact
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Test default behavior with no flags configtest/test-flags/deny/Edit/test-no-flags.tool_input.file_path.rule - clause 1 (tool_input.file_path:ExactCase)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "ExactCase"
+    }
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test default behavior with no flags configtest/test-flags/deny/Edit/test-no-flags.tool_input.file_path.rule - clause 1 (tool_input.file_path:ExactCase)"
+    }
+  }
+}
+log_end

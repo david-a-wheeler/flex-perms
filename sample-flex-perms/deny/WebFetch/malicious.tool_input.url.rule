@@ -1,0 +1,5 @@
+[info]
+reason = Cloud metadata service contains sensitive credentials and tokens.
+
+[clause.1]
+tool_input.url = ^https?://169\.254\.169\.254

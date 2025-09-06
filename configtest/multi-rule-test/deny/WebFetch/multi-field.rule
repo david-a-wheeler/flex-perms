@@ -1,0 +1,6 @@
+[info]
+reason = Test rule requiring multiple fields to match in same clause.
+
+[clause.1]
+tool_input.url = ^https://api\.secure\.com/
+tool_input.headers.Authorization = ^Bearer\s+[A-Za-z0-9]+$

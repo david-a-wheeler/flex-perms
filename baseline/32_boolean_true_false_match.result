@@ -1,0 +1,38 @@
+test_name: 32_boolean_true_false_match
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule: Boolean values converted to strings for regex matching configtest/boolean-test/deny/WebFetch/boolean-patterns.rule - clause 1 (tool_input.url:https://boolean-test.com/endpoint, tool_input.settings.enabled:true, tool_input.settings.method:false)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://boolean-test.com/endpoint",
+      "settings": {
+        "enabled": true,
+        "method": false
+      }
+    }
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule: Boolean values converted to strings for regex matching configtest/boolean-test/deny/WebFetch/boolean-patterns.rule - clause 1 (tool_input.url:https://boolean-test.com/endpoint, tool_input.settings.enabled:true, tool_input.settings.method:false)"
+    }
+  }
+}
+log_end

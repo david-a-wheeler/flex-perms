@@ -1,0 +1,5 @@
+[info]
+reason = Test filename escaping.
+
+[clause.1]
+tool_input.url = ^https://naughty\.example\.com/

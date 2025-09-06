@@ -1,0 +1,37 @@
+test_name: 27_null_value_with_null_pattern
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule for various null value scenarios. configtest/null-test/deny/WebFetch/null-patterns.rule - clause 1 (tool_input.url:https://null-test.com/endpoint, tool_input.headers?.auth_field:None)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://null-test.com/endpoint",
+      "headers": {
+        "auth_field": null
+      }
+    }
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule for various null value scenarios. configtest/null-test/deny/WebFetch/null-patterns.rule - clause 1 (tool_input.url:https://null-test.com/endpoint, tool_input.headers?.auth_field:None)"
+    }
+  }
+}
+log_end

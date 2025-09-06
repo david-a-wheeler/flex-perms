@@ -1,0 +1,9 @@
+# Test rule with no environment variable access
+
+[info]  
+reason = Test rule without environment variables
+
+[clause.1]
+tool_input.url = ^https://env-test\.com/
+# This should fail because env.PATH won't exist
+env.PATH = .*

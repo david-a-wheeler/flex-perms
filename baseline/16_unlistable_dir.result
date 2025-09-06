@@ -1,0 +1,34 @@
+test_name: 16_unlistable_dir
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Security policy file access error: Failed to list directory - configtest/flex-perms-unlistable/allow/WebFetch"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://github.com/user/repo"
+    }
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Security policy file access error: Failed to list directory - configtest/flex-perms-unlistable/allow/WebFetch"
+    }
+  }
+}
+log_end

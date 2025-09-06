@@ -1,0 +1,5 @@
+[info]
+reason = Documentation files are generally safe to edit.
+
+[clause.1]
+tool_input.file_path = \.(md|txt)$

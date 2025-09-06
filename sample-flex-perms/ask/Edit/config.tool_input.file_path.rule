@@ -1,0 +1,11 @@
+[info]
+reason = Configuration files may contain sensitive settings that should be reviewed.
+
+[clause.1]
+tool_input.file_path = /etc/
+
+[clause.2]
+tool_input.file_path = ~/\.config/
+
+[clause.3]
+tool_input.file_path = /\.claude

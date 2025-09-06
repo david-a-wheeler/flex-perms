@@ -1,0 +1,5 @@
+[info]
+reason = Rule from extra directory to test FLEX_CHECK_EXTRA_DIR functionality.
+
+[clause.1]
+tool_input.url = ^https://extra-dir-test\.com/

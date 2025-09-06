@@ -1,0 +1,5 @@
+[info]
+reason = Block access to system files via FileAccess rule (applies to Edit, Read, Write).
+
+[clause.1]
+tool_input.file_path = ^/etc/passwd$

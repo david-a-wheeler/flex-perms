@@ -1,0 +1,6 @@
+[info]
+reason = Test case insensitive matching
+flags = IGNORECASE
+
+[clause.1]
+tool_input.file_path = TEST

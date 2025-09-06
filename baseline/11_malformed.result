@@ -1,0 +1,8 @@
+test_name: 11_malformed
+exit_code: 5
+stdout_start
+
+stdout_end
+log_start
+[
+log_end

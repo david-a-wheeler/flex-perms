@@ -1,0 +1,32 @@
+test_name: 07_bash_sudo_deny
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Sudo commands are blocked. configtest/flex-perms/deny/Bash/sudo.command.rule - clause 1 (command:sudo ls)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "Bash",
+    "command": "sudo ls"
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Sudo commands are blocked. configtest/flex-perms/deny/Bash/sudo.command.rule - clause 1 (command:sudo ls)"
+    }
+  }
+}
+log_end

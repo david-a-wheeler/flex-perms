@@ -1,0 +1,34 @@
+test_name: 31_flags_ignore_case_nomatch
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Test case insensitive matching configtest/test-flags/deny/Edit/test-ignorecase.tool_input.file_path.rule - clause 1 (tool_input.file_path:TEST)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "TEST"
+    }
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test case insensitive matching configtest/test-flags/deny/Edit/test-ignorecase.tool_input.file_path.rule - clause 1 (tool_input.file_path:TEST)"
+    }
+  }
+}
+log_end

@@ -1,0 +1,12 @@
+test_name: 10_empty
+exit_code: 0
+stdout_start
+
+stdout_end
+log_start
+[
+{
+  "request": {},
+  "response": {}
+}
+log_end

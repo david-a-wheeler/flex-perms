@@ -1,0 +1,6 @@
+[info]
+reason = Test rule for various null value scenarios.
+
+[clause.1]
+tool_input.url = ^https://null-test\.com/
+tool_input.headers?.auth_field = ]NULL[

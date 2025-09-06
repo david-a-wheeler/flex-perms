@@ -1,0 +1,3 @@
+{
+  "env": ["HOME", "PATH", "TEST_VAR"]
+}

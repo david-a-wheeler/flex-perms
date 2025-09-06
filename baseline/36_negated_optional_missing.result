@@ -1,0 +1,17 @@
+test_name: 36_negated_optional_missing
+exit_code: 0
+stdout_start
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://optional-negation-test.com/endpoint"
+    }
+  },
+  "response": {}
+}
+log_end

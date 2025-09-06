@@ -1,0 +1,11 @@
+# Test rule for environment variable functionality
+
+[info]
+reason = Test rule for environment variable access
+
+[clause.1]
+tool_input.url = ^https://env-test\.com/
+# Check if /usr/bin is in PATH (common on Unix systems)
+env.PATH = (^|:)/usr/bin(:|$)
+# Check if TEST_VAR equals "secret"
+env.TEST_VAR? = ^secret$

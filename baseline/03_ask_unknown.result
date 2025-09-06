@@ -1,0 +1,30 @@
+test_name: 03_ask_unknown
+exit_code: 0
+stdout_start
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "ask",
+    "permissionDecisionReason": "flex-perms: Request requires permission - matched rule: Unknown domain requires permission. configtest/flex-perms/ask/WebFetch/unknown.tool_input.url.rule - clause 1 (tool_input.url:https://unknown.example.com/test)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://unknown.example.com/test"
+    }
+  },
+  "response": {
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "ask",
+      "permissionDecisionReason": "flex-perms: Request requires permission - matched rule: Unknown domain requires permission. configtest/flex-perms/ask/WebFetch/unknown.tool_input.url.rule - clause 1 (tool_input.url:https://unknown.example.com/test)"
+    }
+  }
+}
+log_end

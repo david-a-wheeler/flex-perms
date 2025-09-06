@@ -1,0 +1,6 @@
+[info]
+reason = Test both case insensitive and verbose
+flags = IGNORECASE,VERBOSE
+
+[clause.1]
+tool_input.file_path = SENSITIVE \s+ FILE

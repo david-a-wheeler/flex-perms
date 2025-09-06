@@ -1,0 +1,6 @@
+[info]
+reason = Test verbose regex with whitespace
+flags = VERBOSE
+
+[clause.1]
+tool_input.file_path = test \s+ file

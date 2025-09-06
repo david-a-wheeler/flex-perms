@@ -1,0 +1,5 @@
+[info]
+reason = Test default behavior with no flags
+
+[clause.1]
+tool_input.file_path = ExactCase

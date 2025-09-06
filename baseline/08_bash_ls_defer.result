@@ -1,0 +1,15 @@
+test_name: 08_bash_ls_defer
+exit_code: 0
+stdout_start
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "Bash",
+    "command": "ls -la"
+  },
+  "response": {}
+}
+log_end

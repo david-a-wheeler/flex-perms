@@ -1,0 +1,6 @@
+[info]
+reason = Test rule for not-null value scenarios.
+
+[clause.1]
+tool_input.url = ^https://not-null-test\.com/
+tool_input.headers?.auth_field = ]NOT_NULL[

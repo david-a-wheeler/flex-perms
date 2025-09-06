@@ -1,0 +1,14 @@
+test_name: 09_no_tool_name
+exit_code: 0
+stdout_start
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "some_other_field": "value"
+  },
+  "response": {}
+}
+log_end

@@ -1,0 +1,34 @@
+test_name: 43_env_vars_empty_list
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Security policy file error: Required field path component 'env' not found in path 'env.PATH' in configtest/env-test-empty/deny/WebFetch/no-env.rule"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://env-test.com/endpoint"
+    }
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Security policy file error: Required field path component 'env' not found in path 'env.PATH' in configtest/env-test-empty/deny/WebFetch/no-env.rule"
+    }
+  }
+}
+log_end

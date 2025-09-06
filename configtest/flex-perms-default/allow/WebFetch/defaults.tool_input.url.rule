@@ -1,0 +1,5 @@
+[info]
+reason = Enterprise default allows this domain.
+
+[clause.1]
+tool_input.url = ^https://default\.example\.com/

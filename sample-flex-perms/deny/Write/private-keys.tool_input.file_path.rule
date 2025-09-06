@@ -1,0 +1,8 @@
+[info]
+reason = SSH private keys contain sensitive cryptographic secrets.
+
+[clause.1]
+tool_input.file_path = /\.ssh/id_[^.]*$
+
+[clause.2]
+tool_input.file_path = /\.ssh/.*_rsa$

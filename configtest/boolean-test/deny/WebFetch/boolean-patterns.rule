@@ -1,0 +1,13 @@
+# Test rule for JSON boolean value conversion
+# This rule should match when enabled field is true and method field is false
+
+[rule]
+description = Test rule for JSON boolean value scenarios
+
+[info]
+reason = Test rule: Boolean values converted to strings for regex matching
+
+[clause.1]
+tool_input.url = ^https://boolean-test\.com/endpoint$
+tool_input.settings.enabled = ^true$
+tool_input.settings.method = ^false$

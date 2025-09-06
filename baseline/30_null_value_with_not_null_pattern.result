@@ -1,0 +1,20 @@
+test_name: 30_null_value_with_not_null_pattern
+exit_code: 0
+stdout_start
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://not-null-test.com/endpoint",
+      "headers": {
+        "auth_field": null
+      }
+    }
+  },
+  "response": {}
+}
+log_end

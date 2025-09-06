@@ -1,0 +1,34 @@
+test_name: 20_options_edit_fileaccess
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Block access to system files via FileAccess rule (applies to Edit, Read, Write). configtest/flex-perms/deny/FileAccess/system-files.rule - clause 1 (tool_input.file_path:/etc/passwd)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "/etc/passwd"
+    }
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Block access to system files via FileAccess rule (applies to Edit, Read, Write). configtest/flex-perms/deny/FileAccess/system-files.rule - clause 1 (tool_input.file_path:/etc/passwd)"
+    }
+  }
+}
+log_end

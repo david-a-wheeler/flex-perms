@@ -1,0 +1,34 @@
+test_name: 25_optional_field_missing
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule with optional headers field that may not be present. configtest/optional-fields-test/deny/WebFetch/optional-headers.rule - clause 1 (tool_input.url:https://api.test.com/endpoint)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://api.test.com/endpoint"
+    }
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule with optional headers field that may not be present. configtest/optional-fields-test/deny/WebFetch/optional-headers.rule - clause 1 (tool_input.url:https://api.test.com/endpoint)"
+    }
+  }
+}
+log_end

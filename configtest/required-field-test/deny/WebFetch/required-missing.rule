@@ -1,0 +1,5 @@
+[info]
+reason = Test rule with required field that is missing from JSON.
+
+[clause.1]
+tool_input.missing_field = some_pattern

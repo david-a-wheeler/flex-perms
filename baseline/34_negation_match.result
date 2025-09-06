@@ -1,0 +1,38 @@
+test_name: 34_negation_match
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule for field path negation functionality configtest/negation-test/deny/WebFetch/negation-rules.rule - clause 1 (tool_input.url:https://negation-test.com/endpoint, !tool_input.headers.authorization:Bearer unsafe-token, !tool_input.headers?.user_agent:MaliciousBrowser)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://negation-test.com/endpoint",
+      "headers": {
+        "authorization": "Bearer unsafe-token",
+        "user_agent": "MaliciousBrowser"
+      }
+    }
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule for field path negation functionality configtest/negation-test/deny/WebFetch/negation-rules.rule - clause 1 (tool_input.url:https://negation-test.com/endpoint, !tool_input.headers.authorization:Bearer unsafe-token, !tool_input.headers?.user_agent:MaliciousBrowser)"
+    }
+  }
+}
+log_end

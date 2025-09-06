@@ -1,0 +1,34 @@
+test_name: 33_flags_both_match
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Test both case insensitive and verbose configtest/test-flags/deny/Edit/test-both-flags.tool_input.file_path.rule - clause 1 (tool_input.file_path:sensitive  FILE)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "sensitive  FILE"
+    }
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test both case insensitive and verbose configtest/test-flags/deny/Edit/test-both-flags.tool_input.file_path.rule - clause 1 (tool_input.file_path:sensitive  FILE)"
+    }
+  }
+}
+log_end

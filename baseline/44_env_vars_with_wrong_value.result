@@ -1,0 +1,17 @@
+test_name: 44_env_vars_with_wrong_value
+exit_code: 0
+stdout_start
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://env-test.com/endpoint"
+    }
+  },
+  "response": {}
+}
+log_end

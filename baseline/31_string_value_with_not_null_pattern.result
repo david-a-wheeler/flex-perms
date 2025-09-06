@@ -1,0 +1,37 @@
+test_name: 31_string_value_with_not_null_pattern
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule for not-null value scenarios. configtest/not-null-test/deny/WebFetch/not-null-patterns.rule - clause 1 (tool_input.url:https://not-null-test.com/endpoint, tool_input.headers?.auth_field:Bearer token)"
+  }
+}
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://not-null-test.com/endpoint",
+      "headers": {
+        "auth_field": "Bearer token"
+      }
+    }
+  },
+  "response": {
+    "continue": false,
+    "stopReason": "flex-perms: Request blocked by deny rule",
+    "hookSpecificOutput": {
+      "hookEventName": "PreToolUse",
+      "permissionDecision": "deny",
+      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule for not-null value scenarios. configtest/not-null-test/deny/WebFetch/not-null-patterns.rule - clause 1 (tool_input.url:https://not-null-test.com/endpoint, tool_input.headers?.auth_field:Bearer token)"
+    }
+  }
+}
+log_end

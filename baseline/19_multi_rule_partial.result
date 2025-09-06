@@ -1,0 +1,20 @@
+test_name: 19_multi_rule_partial
+exit_code: 0
+stdout_start
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://api.secure.com/endpoint",
+      "headers": {
+        "Authorization": "InvalidAuth"
+      }
+    }
+  },
+  "response": {}
+}
+log_end

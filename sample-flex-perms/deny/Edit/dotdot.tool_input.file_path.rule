@@ -1,0 +1,5 @@
+[info]
+reason = This directory traversal using `..` could be a directory traversal attack attempt to access files outside permitted directories.
+
+[clause.1]
+tool_input.file_path = (^|/)\.\.(/|$)

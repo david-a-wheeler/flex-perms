@@ -1,0 +1,5 @@
+[info]
+reason = Test rule with intentional case mismatch to verify error detection.
+
+[clause.1]
+tool_input.headers.authorization = Bearer

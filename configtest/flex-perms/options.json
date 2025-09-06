@@ -1,0 +1,7 @@
+{
+  "see": {
+    "Edit": ["FileAccess"],
+    "Read": ["FileAccess"],
+    "Write": ["FileAccess"]
+  }
+}

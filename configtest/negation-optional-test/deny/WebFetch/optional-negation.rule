@@ -1,0 +1,9 @@
+# Test rule for negated optional field scenarios
+
+[info]
+reason = Test rule for negated optional field behavior
+
+[clause.1]
+tool_input.url = ^https://optional-negation-test\.com/
+# This should NOT match when auth field is missing (missing optional + negation = no match)
+!tool_input.headers?.auth = ^secret$

@@ -1,0 +1,21 @@
+test_name: 35_negation_no_match
+exit_code: 0
+stdout_start
+
+stdout_end
+log_start
+[
+{
+  "request": {
+    "tool_name": "WebFetch",
+    "tool_input": {
+      "url": "https://negation-test.com/endpoint",
+      "headers": {
+        "authorization": "Bearer safe-token",
+        "user_agent": "SafeBrowser"
+      }
+    }
+  },
+  "response": {}
+}
+log_end
