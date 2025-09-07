@@ -20,22 +20,33 @@ Every rule is a separate file, so you can easily share what you've developed.
 Install per [INSTALL.md](./INSTALL.md). You can then create rule files.
 
 Here's an example rule file you could store in file
-`~/.claude/flex-perms/deny/Bash/no-dd.rule`:
+`~/.claude/flex-perms/deny/WebFetch/no-pastebin-binaries.rule`:
 
 ~~~~ini
-# Demo of a rule
+# Demo of a .rule file. Put it in a "deny" directory
 [info]
-reason = Running the `dd` command is forbidden.
+reason = Dangerous request.
+author = Could B. YourName
 
-# A rule matches if ANY of its clauses match,
-# and a clause matches if ALL its conditions match.
-# Here we have one clause named `clause.dd`, and it has one condition.
+# A rule matches if ANY of its clauses match ("OR"),
+# and a clause matches only if ALL its conditions match ("AND").
 
-[clause.dd]
-tool_input.command = ^((/usr)?/bin/)?dd[ \t]+
+# Block access to SSH private keys and config
+[clause.ssh_keys]
+tool_input.command = (\.ssh/(id_|identity|config)|/etc/ssh/)
+
+# Don't download .exe from pastebin
+[clause.pastebin_binary]
+tool_input.url = ^https?://pastebin\.com\.?/.*\.(bin|exe)(/|$)
+
+# Don't modify config files while running production. All must match.
+[clause.production_blackout]
+env.ENVIRONMENT = ^production$
+tool_name = ^(Write|Edit)$
+tool_input.file_path = (config|\.json$)
 ~~~~
 
-As you can guess, a rule file is named `NAME.rule`. It has a required `[info]` section and one or more `[clause.ID]` sections. Clauses contain one or more conditions in the form `field_path = Python_regex`.”
+A rule file is named `NAME.rule`. It has a required `[info]` section and one or more `[clause.ID]` sections. Clauses contain one or more conditions in the form `field_path = Python_regex`.”
 
 ## Brief summary
 
