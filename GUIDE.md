@@ -376,3 +376,13 @@ This might in future gain:
   substitutions. Before processing a regular expression, the substitutions
   are applied in order. This enables use of predefined regular expressions
   in larger expressions.
+* "test". Add self-test clauses. E.g., `[test.NAME.hit]` if the test
+  data should match this rule, and `[test.NAME.miss]` if it should not.
+  We want people to be able to insert spaces, newlines, etc., so we'll
+  want to interpret backslashes in the values. Something like:
+
+~~~~ini
+[test.1.hit]
+tool_name: Bash
+tool_input.command: sudo\nrm -rf /
+~~~~
