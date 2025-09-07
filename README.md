@@ -1,7 +1,8 @@
 # flex-perms project
 
-This `flex-perms` project implements a flexible fine-grained security control
-system for controlling AI code assistants, particularly Claude Code.
+This `flex-perms` project implements an easy-to-use and flexible
+fine-grained security control system for controlling AI code assistants,
+particularly Claude Code.
 
 ## Goals
 

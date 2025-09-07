@@ -7,7 +7,7 @@ permission control over Claude Code and perhaps other AI code assistants.
 
 Its permissions are defined in **permission directories** like `.claude/flex-perms/` (project-specific permissions) and `~/.claude/flex-perms/` (user-specific permissions for all projects), which are checked in order.  These contain optional subdirectories named `deny` (forbid this event), `ask` (ask for user permission), and `allow`. Each of these subdirectories can contain one or more **ToolName** directories for tools (like `WebFetch`, `Edit`, or `Bash`), and inside each tool directory are individual `NAME.rule` files defining specific rules. For example, `.claude/flex-perms/deny/Bash/sudo.rule`.
 
-Each `NAME.rule` file has a required `[info]` section and one or more `[clause.ID]` sections. Clauses contain one or more conditions in the form `field_path = Python_regex`.”
+Each `NAME.rule` file has a required `[info]` section and one or more `[clause.ID]` sections. Clauses contain one or more conditions in the form `field_path = Python_regex` (you don't need to quote the regular expressions, making them easy to use).
 
 Each permission directory is checked in turn. In each permission directory, the rules in `deny` are checked first, then `ask`, then `allow`. Within a rule, a rule matches if any of its clauses match ("OR" semantics), and a clause matches if all its conditions match ("AND" semantics).
 
@@ -30,14 +30,16 @@ The permission decision is made by consulting a sequence of
 "permission directories" in order. Once a permission type is determined,
 that's the decision and the rest of the directories aren't evaluated.
 
-By default these permission directories are:
+By default these permission directories are, in priority order:
 
 * `{ENTERPRISE}/flex-perms` (organization-wide enforced rules)
-* `$FLEX_CHECK_EXTRA_DIR` (if env variable defined; process override)
+* `$FLEX_CHECK_EXTRA_DIR` (if the environment variable is defined;
+  this enables you to easily add a permission directory to specific processes)
 * `./.claude/local/flex-perms` (project-level, your overrides)
 * `./.claude/flex-perms` (project-level, everyone on the project)
 * `$HOME/.claude/flex-perms` (user-level, applies to all projects you work on)
-* `{ENTERPRISE}/default/flex-perms` (organization-wide defaults)
+* `{ENTERPRISE}/default/flex-perms` (organization-wide defaults, checked
+  after the other directories are checked first)
 
 The value of `{ENTERPRISE}` depends on the operating system:
 
@@ -96,7 +98,7 @@ A rule file contains one `[info]`
 section with at least `reason = {REASON TEXT}`
 that provides a relatively short (about one sentence) textual
 reason for the decision that is defined by this rule.
-It may optionally include the keys `author`, `description`,
+The `info` section may optionally include the keys `author`, `description`,
 `timestamp`, and `flags`.
 There's no `name` key because the filename provides that.
 
@@ -323,34 +325,6 @@ The following are other special capabilities not usually needed.
 | **Decision** | Outcome of evaluating a rule for an event: `deny`, `ask`, or `allow`, or `undecided`. | `deny` |
 | **Subsection ID** | Alphanumeric identifier for a clause. Optional; used as `[clause.ID]`. Must be unique within a rule. | `[clause.complexity]` |
 | **Regex Flags** | Settings applied to the conditions’ regex evaluations. Stored in `[info]` as `flags`. | `flags = IGNORECASE,VERBOSE` |
-
-### Notes / Recommendations
-
-1. **Consistency:**
-   - Always use `rule` for the file.
-   - Always use `clause` for sections within a rule.
-   - Always use `condition` for key/value tests.
-   - Always use `field path` for JSON navigation keys.
-
-2. **Clause IDs:**
-   - Optional, alphanumeric, must be unique.
-   - Example: `[clause.no_common]`, `[clause.length]`.
-
-3. **Decision vs Permission:**
-   - `decision` is the value (`deny`, `ask`, `allow`, `undecided`).
-   - “Permission” can be used in documentation to refer to the *effect*, but avoid using it as a section or variable name ambiguously.
-
-4. **Info Section:**
-   - Required. Must include `reason`.
-   - Optional: `author`, `description`, `timestamp`, `flags`.
-
-5. **OR vs AND semantics:**
-   - OR across clauses, AND across conditions within a clause.
-
-6. **Regex values:**
-   - Always raw Python regex strings.
-   - No quotes needed.
-   - Optional negation with `!` in condition keys.
 
 ## Library
 
