@@ -376,6 +376,10 @@ This might in future gain:
   substitutions. Before processing a regular expression, the substitutions
   are applied in order. This enables use of predefined regular expressions
   in larger expressions.
+* "ALL" tool. After trying out the rules for a tool and its "see" groups,
+  try out rules for the pseudo ALL tool. Rules here are *always* tried.
+  Note that conditions in these rules
+  will often need to use `?`, e.g., `tool_input.url?`
 * "test". Add self-test clauses. E.g., `[test.NAME.hit]` if the test
   data should match this rule, and `[test.NAME.miss]` if it should not.
   We want people to be able to insert spaces, newlines, etc., so we'll
