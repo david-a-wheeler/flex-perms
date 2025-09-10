@@ -221,30 +221,22 @@ class FlexCheck:
                 f"Invalid path or data structure: '{path}'")
 
     def log_request_response(self, request: str, response: str) -> None:
-        """Log request and response JSON to logfile if set.
+        """Log request and response JSON to logfile in JSONL format if set.
 
-        Creates a JSON array format where each entry is appended to the array.
-        The file starts with '[' and entries are separated by commas.
-        To create valid JSON, append ']' to the file when done.
+        Each log entry is written as a single JSON object on one line.
+        Format: {"request": {...}, "response": {...}}
         """
         if not self.logfile:
             return
 
         try:
-            # Check if file exists and has content
-            file_exists_with_content = os.path.exists(self.logfile) and os.path.getsize(self.logfile) > 0
+            log_entry = {
+                "request": json.loads(request),
+                "response": json.loads(response)
+            }
 
             with open(self.logfile, 'a', encoding='utf-8') as f:
-                if file_exists_with_content:
-                    f.write(',\n')
-                else:
-                    f.write('[\n')
-
-                log_entry = {
-                    "request": json.loads(request),
-                    "response": json.loads(response)
-                }
-                json.dump(log_entry, f, indent=2)
+                json.dump(log_entry, f, separators=(',', ':'))
                 f.write('\n')
         except (json.JSONDecodeError, OSError):
             # Ignore logging errors

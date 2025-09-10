@@ -4,11 +4,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "some_other_field": "value"
-  },
-  "response": {}
-}
+{"request":{"some_other_field":"value"},"response":{}}
 log_end

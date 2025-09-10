@@ -13,24 +13,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "headers": {
-        "Authorization": "Bearer abc123token"
-      }
-    }
-  },
-  "response": {
-    "continue": false,
-    "stopReason": "flex-perms: Request blocked by deny rule",
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "deny",
-      "permissionDecisionReason": "Access blocked by security policy - matched rule: Security policy file error: Field path 'tool_input.headers.authorization': rule uses 'authorization' but JSON has 'Authorization' in configtest/case-mismatch-test/deny/WebFetch/wrong-case.rule"
-    }
-  }
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"headers":{"Authorization":"Bearer abc123token"}}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: Security policy file error: Field path 'tool_input.headers.authorization': rule uses 'authorization' but JSON has 'Authorization' in configtest/case-mismatch-test/deny/WebFetch/wrong-case.rule"}}}
 log_end

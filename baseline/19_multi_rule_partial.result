@@ -4,17 +4,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://api.secure.com/endpoint",
-      "headers": {
-        "Authorization": "InvalidAuth"
-      }
-    }
-  },
-  "response": {}
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://api.secure.com/endpoint","headers":{"Authorization":"InvalidAuth"}}},"response":{}}
 log_end

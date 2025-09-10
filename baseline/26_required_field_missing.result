@@ -13,22 +13,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://api.test.com/endpoint"
-    }
-  },
-  "response": {
-    "continue": false,
-    "stopReason": "flex-perms: Request blocked by deny rule",
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "deny",
-      "permissionDecisionReason": "Access blocked by security policy - matched rule: Security policy file error: Required field path component 'missing_field' not found in path 'tool_input.missing_field' in configtest/required-field-test/deny/WebFetch/required-missing.rule"
-    }
-  }
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://api.test.com/endpoint"}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: Security policy file error: Required field path component 'missing_field' not found in path 'tool_input.missing_field' in configtest/required-field-test/deny/WebFetch/required-missing.rule"}}}
 log_end

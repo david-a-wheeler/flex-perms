@@ -13,22 +13,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "Edit",
-    "tool_input": {
-      "file_path": "ExactCase"
-    }
-  },
-  "response": {
-    "continue": false,
-    "stopReason": "flex-perms: Request blocked by deny rule",
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "deny",
-      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test default behavior with no flags configtest/test-flags/deny/Edit/test-no-flags.tool_input.file_path.rule - clause 1 (tool_input.file_path:ExactCase)"
-    }
-  }
-}
+{"request":{"tool_name":"Edit","tool_input":{"file_path":"ExactCase"}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: Test default behavior with no flags configtest/test-flags/deny/Edit/test-no-flags.tool_input.file_path.rule - clause 1 (tool_input.file_path:ExactCase)"}}}
 log_end

@@ -11,20 +11,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://default.example.com/path"
-    }
-  },
-  "response": {
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "allow",
-      "permissionDecisionReason": "flex-perms: Request permitted by allow rule - matched rule: Enterprise default allows this domain. configtest/flex-perms-default/allow/WebFetch/defaults.tool_input.url.rule - clause 1 (tool_input.url:https://default.example.com/path)"
-    }
-  }
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://default.example.com/path"}},"response":{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"allow","permissionDecisionReason":"flex-perms: Request permitted by allow rule - matched rule: Enterprise default allows this domain. configtest/flex-perms-default/allow/WebFetch/defaults.tool_input.url.rule - clause 1 (tool_input.url:https://default.example.com/path)"}}}
 log_end

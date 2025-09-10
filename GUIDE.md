@@ -283,11 +283,11 @@ You shouldn't normally need them, but here they are:
   directory after environment permission directory.
   This simulates command line arguments.
 * `FLEX_CHECK_LOGFILE`: If set, this is the path to a log file for recording
-  permission requests and responses. In this file a `[` appended if
-  it's non-existent, otherwise a `,` is appended.
-  Every time a request and response is made, a JSON object is printed to
-  the logfile with both. You can read the entire logfile as a JSON object
-  by appending ']' to the file contents.
+  permission requests and responses in JSONL format (JSON Lines).
+  Each log entry is written as a single JSON object on one line with the format:
+  `{"request": {...}, "response": {...}}`
+  This format is fault-tolerant (crashes don't corrupt previous entries) and
+  supports streaming processing.
 * `FLEX_CHECK_DEBUG`: Set to `true` to enable verbose debug output
   to stderr showing rule processing steps. You can also enable with the
   `--debug` flag to `flex-check.py`

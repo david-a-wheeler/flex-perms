@@ -13,22 +13,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://evil.com/malware"
-    }
-  },
-  "response": {
-    "continue": false,
-    "stopReason": "flex-perms: Request blocked by deny rule",
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "deny",
-      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test malicious URL blocking. configtest/flex-perms/deny/WebFetch/malicious.tool_input.url.rule - clause 1 (tool_input.url:https://evil.com/malware)"
-    }
-  }
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://evil.com/malware"}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: Test malicious URL blocking. configtest/flex-perms/deny/WebFetch/malicious.tool_input.url.rule - clause 1 (tool_input.url:https://evil.com/malware)"}}}
 log_end

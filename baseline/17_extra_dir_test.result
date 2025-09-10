@@ -13,22 +13,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://extra-dir-test.com/path"
-    }
-  },
-  "response": {
-    "continue": false,
-    "stopReason": "flex-perms: Request blocked by deny rule",
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "deny",
-      "permissionDecisionReason": "Access blocked by security policy - matched rule: Rule from extra directory to test FLEX_CHECK_EXTRA_DIR functionality. configtest/extra-dir/deny/WebFetch/extra-test.rule - clause 1 (tool_input.url:https://extra-dir-test.com/path)"
-    }
-  }
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://extra-dir-test.com/path"}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: Rule from extra directory to test FLEX_CHECK_EXTRA_DIR functionality. configtest/extra-dir/deny/WebFetch/extra-test.rule - clause 1 (tool_input.url:https://extra-dir-test.com/path)"}}}
 log_end

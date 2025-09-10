@@ -13,22 +13,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://naughty.example.com/path"
-    }
-  },
-  "response": {
-    "continue": false,
-    "stopReason": "flex-perms: Request blocked by deny rule",
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "deny",
-      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test filename escaping. configtest/flex-perms/deny/WebFetch/naughty\"file.tool_input.url.rule - clause 1 (tool_input.url:https://naughty.example.com/path)"
-    }
-  }
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://naughty.example.com/path"}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: Test filename escaping. configtest/flex-perms/deny/WebFetch/naughty\"file.tool_input.url.rule - clause 1 (tool_input.url:https://naughty.example.com/path)"}}}
 log_end

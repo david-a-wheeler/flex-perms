@@ -13,25 +13,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://null-negation-test.com/endpoint",
-      "headers": {
-        "auth": "Bearer token123"
-      }
-    }
-  },
-  "response": {
-    "continue": false,
-    "stopReason": "flex-perms: Request blocked by deny rule",
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "deny",
-      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule for negated null pattern behavior configtest/negation-null-test/deny/WebFetch/null-negation.rule - clause 1 (tool_input.url:https://null-negation-test.com/endpoint, !tool_input.headers.auth:Bearer token123)"
-    }
-  }
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://null-negation-test.com/endpoint","headers":{"auth":"Bearer token123"}}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: Test rule for negated null pattern behavior configtest/negation-null-test/deny/WebFetch/null-negation.rule - clause 1 (tool_input.url:https://null-negation-test.com/endpoint, !tool_input.headers.auth:Bearer token123)"}}}
 log_end

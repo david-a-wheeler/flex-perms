@@ -13,22 +13,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://env-test.com/endpoint"
-    }
-  },
-  "response": {
-    "continue": false,
-    "stopReason": "flex-perms: Request blocked by deny rule",
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "deny",
-      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule for environment variable access configtest/env-test/deny/WebFetch/env-rules.rule - clause 1 (tool_input.url:https://env-test.com/endpoint, env.PATH:/home/dwheeler/.rbenv/shims:/home/dwheeler/.rbenv/bin:/home/dwheeler/.local/bin:/home/dwheeler/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/dwheeler/.npm-packages/bin)"
-    }
-  }
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://env-test.com/endpoint"}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: Test rule for environment variable access configtest/env-test/deny/WebFetch/env-rules.rule - clause 1 (tool_input.url:https://env-test.com/endpoint, env.PATH:/home/dwheeler/.rbenv/shims:/home/dwheeler/.rbenv/bin:/home/dwheeler/.local/bin:/home/dwheeler/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/dwheeler/.npm-packages/bin)"}}}
 log_end

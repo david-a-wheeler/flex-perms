@@ -4,14 +4,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://totally-unmatched.example.org"
-    }
-  },
-  "response": {}
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://totally-unmatched.example.org"}},"response":{}}
 log_end

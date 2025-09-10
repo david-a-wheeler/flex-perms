@@ -4,14 +4,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://optional-negation-test.com/endpoint"
-    }
-  },
-  "response": {}
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://optional-negation-test.com/endpoint"}},"response":{}}
 log_end

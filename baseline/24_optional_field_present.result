@@ -13,25 +13,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://api.test.com/endpoint",
-      "headers": {
-        "Authorization": "Bearer token123"
-      }
-    }
-  },
-  "response": {
-    "continue": false,
-    "stopReason": "flex-perms: Request blocked by deny rule",
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "deny",
-      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule with optional headers field that may not be present. configtest/optional-fields-test/deny/WebFetch/optional-headers.rule - clause 1 (tool_input.url:https://api.test.com/endpoint, tool_input.headers?.Authorization:Bearer token123)"
-    }
-  }
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://api.test.com/endpoint","headers":{"Authorization":"Bearer token123"}}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: Test rule with optional headers field that may not be present. configtest/optional-fields-test/deny/WebFetch/optional-headers.rule - clause 1 (tool_input.url:https://api.test.com/endpoint, tool_input.headers?.Authorization:Bearer token123)"}}}
 log_end

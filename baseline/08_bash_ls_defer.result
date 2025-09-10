@@ -4,12 +4,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "Bash",
-    "command": "ls -la"
-  },
-  "response": {}
-}
+{"request":{"tool_name":"Bash","command":"ls -la"},"response":{}}
 log_end

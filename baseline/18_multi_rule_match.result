@@ -13,25 +13,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://api.secure.com/endpoint",
-      "headers": {
-        "Authorization": "Bearer abc123token"
-      }
-    }
-  },
-  "response": {
-    "continue": false,
-    "stopReason": "flex-perms: Request blocked by deny rule",
-    "hookSpecificOutput": {
-      "hookEventName": "PreToolUse",
-      "permissionDecision": "deny",
-      "permissionDecisionReason": "Access blocked by security policy - matched rule: Test rule requiring multiple fields to match in same clause. configtest/multi-rule-test/deny/WebFetch/multi-field.rule - clause 1 (tool_input.url:https://api.secure.com/endpoint, tool_input.headers.Authorization:Bearer abc123token)"
-    }
-  }
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://api.secure.com/endpoint","headers":{"Authorization":"Bearer abc123token"}}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: Test rule requiring multiple fields to match in same clause. configtest/multi-rule-test/deny/WebFetch/multi-field.rule - clause 1 (tool_input.url:https://api.secure.com/endpoint, tool_input.headers.Authorization:Bearer abc123token)"}}}
 log_end

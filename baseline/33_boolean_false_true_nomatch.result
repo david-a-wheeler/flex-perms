@@ -4,18 +4,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://boolean-test.com/endpoint",
-      "settings": {
-        "enabled": false,
-        "method": true
-      }
-    }
-  },
-  "response": {}
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://boolean-test.com/endpoint","settings":{"enabled":false,"method":true}}},"response":{}}
 log_end

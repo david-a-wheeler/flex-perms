@@ -4,17 +4,5 @@ stdout_start
 
 stdout_end
 log_start
-[
-{
-  "request": {
-    "tool_name": "WebFetch",
-    "tool_input": {
-      "url": "https://null-test.com/endpoint",
-      "headers": {
-        "auth_field": "Bearer token"
-      }
-    }
-  },
-  "response": {}
-}
+{"request":{"tool_name":"WebFetch","tool_input":{"url":"https://null-test.com/endpoint","headers":{"auth_field":"Bearer token"}}},"response":{}}
 log_end
