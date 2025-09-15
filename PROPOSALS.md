@@ -34,6 +34,9 @@ In addition, this would make it easier to add support for defining
 rules using the [lark](https://github.com/lark-parser/lark) parser later
 if we go that route.
 
+For now, we'll require the first non-space character to be '/' which
+will immediately detect some errors.
+
 This is a backwards-incompatible notation change, but we're the only
 user and this is in the version 0.X series. Now is the time for
 backwards-incompatible changes. The file `transition.py` will implement
