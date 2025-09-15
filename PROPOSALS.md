@@ -36,7 +36,8 @@ if we go that route.
 
 This is a backwards-incompatible notation change, but we're the only
 user and this is in the version 0.X series. Now is the time for
-backwards-incompatible changes.
+backwards-incompatible changes. The file `transition.py` will implement
+this transition for us.
 
 ## Substitutions
 
@@ -140,6 +141,9 @@ ensures that the name of a substitution
 key is unique among all substitution sections in this rule *and*
 all external substitutions that were transitively
 imported from `includes` sections.
+
+Rationale: There's no namespace isolation for substitutions, however,
+users can use long names to do essentially the same thing.
 
 Here's an example, which matches a chmod command with one or more files,
 as well a cp command with exactly two files:
@@ -310,6 +314,12 @@ any `clause`s it defines are applied *before* returning to the caller.
 Externally-visible substitutions should be documented so that the
 correct flags will be used for them.
 
+The system passes the files included so far, and will ignore files
+already included on a particular branch. This prevents circular dependencies
+from causing an infinite loop. There's a limited number of files, and
+generally only files in `includes/` will be included, so there's no need to
+limit the depth count as well.
+
 ## "ALL" tool
 
 Sometimes you want to define a pattern and apply it across *many*
@@ -317,9 +327,9 @@ tools, in an easy way.
 
 Proposed solution: a pseudo "ALL" tool (a tool subdirectory named "ALL"
 for each possible decision).
-After trying out the rules for a tool and its "see" groups,
+After trying out the rules for a tool and *all* "see" groups (transitively),
 the system will try the rules for the pseudo ALL tool. Rules for the ALL tool
-are *always* tried if the other tools don't have a match.
+are *always* tried if all the other tools don't have a match.
 
 Note that conditions in these rules
 will often need to use `?`. At least `tool_input.url?` and maybe
