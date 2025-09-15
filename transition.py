@@ -39,8 +39,10 @@ def convert_rule_file(filepath):
                 match = re.match(r'(\s*[^=]+\s*=\s*)([\'"]?)(.+?)\2\s*$', line)
                 if match:
                     prefix, quote, value = match.groups()
+                    # Escape forward slashes for /regex/ format
+                    escaped_value = value.replace('/', '\\/')
                     # Convert to /regex/flags format
-                    output_lines.append(f"{prefix}/{value}/{flags}\n")
+                    output_lines.append(f"{prefix}/{escaped_value}/{flags}\n")
                     continue
 
         # Keep all other lines (including comments) unchanged

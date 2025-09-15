@@ -37,6 +37,8 @@ if we go that route.
 For now, we'll require the first non-space character to be '/' which
 will immediately detect some errors.
 
+This does mean that `/` will need to be escaped, e.g., `\/`. That's unfortunate but really common in regex expressions.
+
 This is a backwards-incompatible notation change, but we're the only
 user and this is in the version 0.X series. Now is the time for
 backwards-incompatible changes. The file `transition.py` will implement
