@@ -33,11 +33,11 @@ author = Could B. YourName
 
 # Block access to SSH private keys and config
 [clause.ssh_keys]
-tool_input.command = (\.ssh/(id_|identity|config)|/etc/ssh/)
+tool_input.command = /(\.ssh\/(id_|identity|config)|\/etc\/ssh\/)/
 
 # Don't download .exe from pastebin
 [clause.pastebin_binary]
-tool_input.url = ^https?://pastebin\.com\.?/.*\.(bin|exe)(/|$)
+tool_input.url = /^https?:\/\/pastebin\.com\.?\/.*\.(bin|exe)(\/|$)/
 
 # Don't modify config files while running production. All must match.
 [clause.production_blackout]
