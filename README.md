@@ -39,7 +39,7 @@ tool_input.command = /(\.ssh\/(id_|identity|config)|\/etc\/ssh\/)/
 [clause.pastebin_binary]
 tool_input.url = /^https?:\/\/pastebin\.com\.?\/.*\.(bin|exe)(\/|$)/
 
-# Don't modify config files while running production. All must match.
+# Don't modify config files while running production. All lines must match.
 [clause.production_blackout]
 env.ENVIRONMENT = ^production$
 tool_name = ^(Write|Edit)$
