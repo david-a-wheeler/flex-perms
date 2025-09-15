@@ -2,4 +2,4 @@
 reason = Test headers-only rule.
 
 [clause.1]
-tool_input.headers.Authorization = Bearer
+tool_input.headers.Authorization = /Bearer/

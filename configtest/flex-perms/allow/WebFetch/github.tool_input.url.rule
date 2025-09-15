@@ -2,7 +2,7 @@
 reason = GitHub URLs are safe to access.
 
 [clause.1]
-tool_input.url = ^https://github\.com/
+tool_input.url = /^https:\/\/github\.com\//
 
 [clause.2]
-tool_input.url = ^https://.*\.githubusercontent\.com/
+tool_input.url = /^https:\/\/.*\.githubusercontent\.com\//

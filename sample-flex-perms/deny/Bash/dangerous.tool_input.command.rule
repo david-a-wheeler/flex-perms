@@ -2,10 +2,10 @@
 reason = Dangerous system commands that can escalate privileges or destroy data.
 
 [clause.1]
-tool_input.command = ^((/usr)?/bin/)?sudo[ \t]+
+tool_input.command = /^((\/usr)?\/bin\/)?sudo[ \t]+/
 
 [clause.2]
-tool_input.command = ^((/usr)?/bin/)?rm[ \t]+-rf[ \t]+/
+tool_input.command = /^((\/usr)?\/bin\/)?rm[ \t]+-rf[ \t]+\//
 
 [clause.3]
-tool_input.command = ^((/usr)?/bin/)?(curl|wget)[ \t]+.*\|[ \t]*(sh|bash|dash|ksh)
+tool_input.command = /^((\/usr)?\/bin\/)?(curl|wget)[ \t]+.*\|[ \t]*(sh|bash|dash|ksh)/

@@ -2,4 +2,4 @@
 reason = Searching for private key patterns could expose cryptographic secrets.
 
 [clause.1]
-tool_input.pattern = BEGIN.*PRIVATE.*KEY
+tool_input.pattern = /BEGIN.*PRIVATE.*KEY/

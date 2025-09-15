@@ -4,6 +4,6 @@
 reason = Test rule for negated null pattern behavior
 
 [clause.1]
-tool_input.url = ^https://null-negation-test\.com/
+tool_input.url = /^https:\/\/null-negation-test\.com\//
 # This should match when auth field is NOT null (i.e., has any actual value)
-!tool_input.headers.auth = ]NULL[
+!tool_input.headers.auth = /]NULL[/

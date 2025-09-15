@@ -2,4 +2,4 @@
 reason = Unknown domain requires permission.
 
 [clause.1]
-tool_input.url = ^https://unknown\.example\.com/
+tool_input.url = /^https:\/\/unknown\.example\.com\//

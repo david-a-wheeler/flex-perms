@@ -2,4 +2,4 @@
 reason = Sudo commands are blocked.
 
 [clause.1]
-command = ^sudo
+command = /^sudo/

@@ -6,8 +6,8 @@ reason = Test rule for field path negation functionality
 
 [clause.1]
 # Basic negation - match URLs that do NOT start with "https://safe"
-tool_input.url = ^https://negation-test\.com/
-!tool_input.headers.authorization = ^Bearer safe-token
+tool_input.url = /^https:\/\/negation-test\.com\//
+!tool_input.headers.authorization = /^Bearer safe-token/
 
 # Test with optional field negation
-!tool_input.headers?.user_agent = ^SafeBrowser
+!tool_input.headers?.user_agent = /^SafeBrowser/

@@ -2,10 +2,10 @@
 reason = Test malicious URL blocking.
 
 [clause.1]
-tool_input.url = ^https://evil\.com/
+tool_input.url = /^https:\/\/evil\.com\//
 
 [clause.2]
-tool_input.url = ^https://malware\.
+tool_input.url = /^https:\/\/malware\./
 
 [clause.3]
-tool_input.url = ^https://.*\.malicious\.
+tool_input.url = /^https:\/\/.*\.malicious\./

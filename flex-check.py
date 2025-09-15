@@ -20,7 +20,7 @@ class FlexCheck:
 
     # Allowed keys in [info] section of rule files
     ALLOWED_INFO_KEYS = {
-        'reason', 'author', 'description', 'timestamp', 'flags'
+        'reason', 'author', 'description', 'timestamp'
     }
 
     class FileAccessError(Exception):
@@ -243,8 +243,8 @@ class FlexCheck:
             pass
 
     def parse_rule_file(self, rule_path: str
-                       ) -> Tuple[str, List[Dict[str, str]], str]:
-        """Parse a .rule file and return (reason, clauses, flag_string)."""
+                       ) -> Tuple[str, List[Dict[str, str]]]:
+        """Parse a .rule file and return (reason, clauses)."""
         try:
             with open(rule_path, 'r', encoding='utf-8') as f:
                 content = f.read()
@@ -302,9 +302,6 @@ class FlexCheck:
 
         reason = info_section['reason']
 
-        # Extract optional flags (store as string, parse when needed)
-        flag_string = info_section.get('flags', '')
-
         # Extract clauses in file order
         clauses = []
         for section_name in config.sections():
@@ -319,47 +316,69 @@ class FlexCheck:
         if not clauses:
             raise self.MalformedRuleError(rule_path, "No clause sections found")
 
-        return reason, clauses, flag_string
+        return reason, clauses
 
-    def parse_regex_flags(self, flag_string: str) -> int:
-        """Convert comma-separated flag names to regex flags integer.
+    def parse_slashed_regex(self, pattern: str) -> Tuple[str, int]:
+        """Parse /regex/flags format and return (regex, flags).
 
         Args:
-            flag_string: Comma-separated regex flag names
-                (e.g., 'IGNORECASE,VERBOSE')
+            pattern: Either a regular pattern or /regex/flags format
 
         Returns:
-            Integer combination of regex flags
+            (regex_pattern, flags_int): Extracted regex and compiled flags
 
         Raises:
-            AttributeError: If flag string contains invalid flag names
+            ValueError: If /regex/flags format is malformed
         """
-        if not flag_string.strip():
-            return 0
+        if not pattern.strip().startswith('/'):
+            # Not slashed format - return as-is with no flags
+            return pattern, 0
 
-        flag_names = [name.strip() for name in flag_string.split(',')]
-        merged_flags = re.NOFLAG
+        # Parse /regex/flags format
+        if pattern.count('/') < 2:
+            raise ValueError(f"Malformed /regex/flags pattern: {pattern}")
 
-        for flag_name in flag_names:
-            merged_flags |= getattr(re, flag_name)
+        # Find the last '/' to separate regex from flags
+        last_slash = pattern.rfind('/')
+        if last_slash <= 0:
+            raise ValueError(f"Malformed /regex/flags pattern: {pattern}")
 
-        return merged_flags
+        regex_part = pattern[1:last_slash]  # Remove leading /
+        flags_part = pattern[last_slash + 1:]  # Remove trailing /
+
+        # Convert single-character flags to regex flags
+        flags = 0
+        for flag_char in flags_part:
+            if flag_char == 'i':
+                flags |= re.IGNORECASE
+            elif flag_char == 'm':
+                flags |= re.MULTILINE
+            elif flag_char == 's':
+                flags |= re.DOTALL
+            elif flag_char == 'x':
+                flags |= re.VERBOSE
+            elif flag_char == 'a':
+                flags |= re.ASCII
+            else:
+                raise ValueError(f"Unknown regex flag '{flag_char}' in pattern: {pattern}")
+
+        return regex_part, flags
 
     def _is_special_pattern(self, pattern: str) -> bool:
         """Check if pattern is a special null-matching pattern."""
-        return pattern in ("]NULL[", "]NOT_NULL[")
+        return pattern in ("]NULL[", "]NOT_NULL[", "/]NULL[/", "/]NOT_NULL[/")
 
     def _evaluate_null_pattern(self, pattern: str, value: any, negated: bool) -> bool:
         """Evaluate special null-matching patterns."""
-        if pattern == "]NULL[":
+        if pattern in ("]NULL[", "/]NULL[/"):
             return (value is None) != negated
-        elif pattern == "]NOT_NULL[":
+        elif pattern in ("]NOT_NULL[", "/]NOT_NULL[/"):
             return (value is not None) != negated
         else:
             # Regular pattern vs JSON null never matches (except when negated)
             return negated
 
-    def evaluate_condition(self, field_path: str, pattern: str, json_input: str, flag_string: str = '') -> bool:
+    def evaluate_condition(self, field_path: str, pattern: str, json_input: str) -> bool:
         """Evaluate a single condition against JSON input.
 
         Args:
@@ -395,12 +414,12 @@ class FlexCheck:
         else:
             # Regular regex matching for non-null values
             try:
-                regex_flags = self.parse_regex_flags(flag_string)
+                regex_pattern, regex_flags = self.parse_slashed_regex(pattern)
                 match_result = (
-                    bool(re.search(pattern, value, regex_flags)) != negated
+                    bool(re.search(regex_pattern, value, regex_flags)) != negated
                 )
-            except (re.error, AttributeError) as e:
-                self._debug_condition_result(field_path, pattern, value, False, negated, "invalid regex/flags")
+            except (re.error, ValueError) as e:
+                self._debug_condition_result(field_path, pattern, value, False, negated, f"invalid regex/flags: {e}")
                 return False
 
         self._debug_condition_result(field_path, pattern, value, match_result, negated)
@@ -416,7 +435,7 @@ class FlexCheck:
             result = 'PASSED' if passed else 'FAILED'
         self.debug_msg(f"Field path '{prefix}{field_path}': pattern '{pattern}' vs value '{value}' - {result}")
 
-    def evaluate_clause(self, clause: Dict[str, str], json_input: str, flag_string: str = '') -> bool:
+    def evaluate_clause(self, clause: Dict[str, str], json_input: str) -> bool:
         """Check if a clause matches the JSON input.
 
         Field path negation:
@@ -437,7 +456,7 @@ class FlexCheck:
         self.debug_msg(f"Evaluating clause with {len(clause)} conditions")
 
         for field_path, pattern in clause.items():
-            if not self.evaluate_condition(field_path, pattern, json_input, flag_string):
+            if not self.evaluate_condition(field_path, pattern, json_input):
                 return False
 
         self.debug_msg(f"All conditions processed - clause PASSED")
@@ -448,13 +467,13 @@ class FlexCheck:
         self.debug_msg(f"Processing rule file: {rule_path}")
 
         try:
-            reason, clauses, flag_string = self.parse_rule_file(rule_path)
+            reason, clauses = self.parse_rule_file(rule_path)
             self.debug_msg(f"Rule file parsed: {len(clauses)} clauses found")
 
             # Test clauses in file order
             for i, clause in enumerate(clauses):
                 self.debug_msg(f"Testing clause {i+1}/{len(clauses)} in {rule_path}")
-                if self.evaluate_clause(clause, json_input, flag_string):
+                if self.evaluate_clause(clause, json_input):
                     # Build match description
                     field_descriptions = []
                     for field_path, pattern in clause.items():

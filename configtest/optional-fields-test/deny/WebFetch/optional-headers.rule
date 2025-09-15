@@ -2,5 +2,5 @@
 reason = Test rule with optional headers field that may not be present.
 
 [clause.1]
-tool_input.url = ^https://api\.test\.com/
-tool_input.headers?.Authorization = Bearer
+tool_input.url = /^https:\/\/api\.test\.com\//
+tool_input.headers?.Authorization = /Bearer/
