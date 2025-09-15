@@ -330,19 +330,12 @@ class FlexCheck:
         Raises:
             ValueError: If /regex/flags format is malformed
         """
-        if not pattern.strip().startswith('/'):
-            # Not slashed format - return as-is with no flags
-            return pattern, 0
-
         # Parse /regex/flags format
-        if pattern.count('/') < 2:
+        if not pattern.strip().startswith('/') or pattern.count('/') < 2:
             raise ValueError(f"Malformed /regex/flags pattern: {pattern}")
 
         # Find the last '/' to separate regex from flags
         last_slash = pattern.rfind('/')
-        if last_slash <= 0:
-            raise ValueError(f"Malformed /regex/flags pattern: {pattern}")
-
         regex_part = pattern[1:last_slash]  # Remove leading /
         flags_part = pattern[last_slash + 1:]  # Remove trailing /
 
