@@ -2,11 +2,8 @@
 
 Here are proposed changes to the current system:
 
-* Optional `[pattern]` section to define pattern-matching options,
-  and move the `flags` key from `[info]` to `[pattern]`
-  An [info] section with a `flags` key becomes malformed.
-  This means existing rules must move `flags` from info to pattern.
-  These are rare, so not a problem, and we're not at version 1.0.0 yet.
+* Remove `flags` key from `info` entirely, and change regex format
+  in clauses to use slashed regex notation `/.../FLAGS` instead.
 * "include". Identify rules to import.
   It loads the corresponding file(s) from the permission directories'
   `includes` directory.
@@ -17,31 +14,29 @@ Here are proposed changes to the current system:
 * "ALL" tool. A pseudo-tool named ALL; rules for ALL are *always* tried
   after the "see" options.
 * Self-test sections.
-* Log in JSONL format. Currently logs are written in a custom format.
 
 Below is a proposed design, with commentary. I express this in
 present tense so we can use this text as documentation if we accept it.
 
 * * *
 
-## Pattern section
+## Switch to /.../FLAGS regex notation.
 
-Rules can have an optional `[pattern]` section to define options
-about pattern matching. This includes a `flags =` key.
+The `[info]` section's `flags =` key will be removed.
 
-The `flags` key is
-a comma-separated list of options such as `IGNORECASE`.
-Whitespace is removed and ignored.
-The options must use long names
-(not a single characters) and must be in alphabetical order,
-to simplify `includes` directives as discussed later.
+Every regex in the current setup (as part of a clause)
+will be rewritten to use /.../FLAGS notation
+(where FLAGS can be empty).
 
-Someday this might gain a `language` key, with potential values
-such as `glob`.
+This is more flexible, as each use can decide on its own flags.
+It eliminates complications in how to deal with different flags.
+In addition, this would make it easier to add support for defining
+rules using the [lark](https://github.com/lark-parser/lark) parser later
+if we go that route.
 
-NOTE: Currently flags are in the `[info]` section, but flags are
-so different that putting them in their own section makes sense
-to isolate their effects.
+This is a backwards-incompatible notation change, but we're the only
+user and this is in the version 0.X series. Now is the time for
+backwards-incompatible changes.
 
 ## Substitutions
 
@@ -107,9 +102,7 @@ Every time the key *literally* appears in a regular expression,
 it is replaced, without any special syntax to trigger a replacement.
 This avoids the need to specially escape a regular expression that
 doesn't use the replacement marker.
-The resulting final regex *must* be a valid regex with the current flags
-(as checked through compiling); this slightly reduces the risk of
-creating an illegal regex that's hard to debug.
+
 When the debug mode is enabled, each key is written with its value before
 and after regex processing to simplify debugging.
 
@@ -158,13 +151,13 @@ $[FILES] = $(FILE)([ \t]+$(FILE))*
 SMILEY = :-\)
 
 [clause.1]
-tool_input.command = ^chmod[ \t]+[ugo=+-rwx0-9]+[ \t]+$[FILES]$
+tool_input.command = /^chmod[ \t]+[ugo=+-rwx0-9]+[ \t]+$[FILES]$/
 
 [clause.2]
-tool_input.command = ^cp[ \t]+$(FILE)[ \t]+$(FILE)$
+tool_input.command = /^cp[ \t]+$(FILE)[ \t]+$(FILE)$/
 
 [clause.3]
-tool_input.command = ^echo[ \t].*SMILEY
+tool_input.command = /^echo[ \t].*SMILEY/
 ~~~~
 
 ### Substitution design notes
@@ -234,8 +227,7 @@ An included rule file is processed similarly to normal rule files
 (leading `#` is a comment,
 trailing whitespace is removed). In principle
 it has no *required* sections.
-It can include substitutions, clauses, and a `pattern` section
-(which may set `flags`).
+It can include substitutions and clauses.
 It *must* include an `info` section with `reason` if this rule file has
 one or more `clause` sections.
 (A "primary" file must 1+ clauses, and that requirement triggers this rule.)
@@ -247,8 +239,6 @@ Here is an example:
 
 ~~~~ini
 # File includes/file.rule
-[info]
-flags = VERBOSE
 
 # Substitutions have NO special substitution syntax, the %..% is arbitrary
 [substitutions]
@@ -257,7 +247,6 @@ flags = VERBOSE
 # File includes/files.rule
 [info]
 reason = No weird mysudo use.
-flags = VERBOSE
 includes = file.rule
 
 # Substitutions have NO special substitution syntax. Notice we use
@@ -266,18 +255,16 @@ includes = file.rule
 $FILES$ = %FILE%([ \t]+%FILE%)*
 
 [clause.1]
-user_input.command = ^mysudo\s+$FILES$( *: *%FILE%)*
+user_input.command = /^mysudo\s+$FILES$( *: *%FILE%)*/
 
 # File demo.rule
 [info]
 reason = demo.
-# Note that all flags values must match
-flags = VERBOSE
 includes = files.rule
 
 # Clauses have separate namespaces, they can reuse names.
 [clause.1]
-user_input.command = ^theirsudo\s+$FILES$( *: *%FILE%)*
+user_input.command = /^theirsudo\s+$FILES$( *: *%FILE%)*/
 ~~~~
 
 Here is pseudocode:
@@ -286,7 +273,7 @@ Here is pseudocode:
 process_rule_file(file) -> decision, external_substitutions, pattern settings:
   - load file (INI format) into memory
   - remove "#" comments and trailing whitespace, identify sections and their key/values.
-  - If there's an info.includes, run process_rule_file(file) sequentially on each, retrieving their external_substitutions and pattern settings. If any one of them returns 1+ external substitutions AND their pattern settings (esp. flag) doesn't match our current pattern settings (flags), then the rule is malformed (to prevent incompatible flag settings).
+  - If there's an info.includes, run process_rule_file(file) sequentially on each, retrieving their external_substitutions and pattern settings.
   - compute list of external substitutions by appending all returned included external substitutions in order
   - compute list of local substitutions by starting with external subsitutions and appending all substitution sections in our file in order
   - process all clauses: for each condition, if we need to apply the regex, first apply the local substitutions to the regex patterns in reverse order, then apply the regex to determine if its value matches. Once a clause triggers, we have a decision and we don't need to process anything else
@@ -320,37 +307,8 @@ keys for substitutions, and we do detect the problem.
 Once an included file is loaded and its included files are resolved,
 any `clause`s it defines are applied *before* returning to the caller.
 
-A complicating factor is that the `flags` value could have
-*different* settings in different rule files.
-This would subtly change interpretations.
-However, when we can keep substitutions local there's no problem.
-These rules ensure that for some set of rules they're consistent,
-but allow for some flexibility.
-A rule that includes other files must have the same pattern.flags
-setting as every file it includes that returns 1+ external substitutions
-(ignoring whitespace in the flags values), to ensure that substitutions
-always have the same meaning.
-If no substitution is defined by a file being included, its flags setting
-can be different because it won't impact any interpretation of other rules.
-For the purposes of this consistency check, having flags unset is equivalent
-to a flags value of the empty string.
-So, if any included file sets flags to simply `IGNORECASE`
-*and* it defines one or more externally-usable substitutions,
-all rules including or included by it must have the same flag setting
-of `IGNORECASE`.
-This *is* restrictive.
-However, allowing overrides of the flags value could cause problems.
-We may relax this requirement later, if we can find a better
-way to deal with this.
-
-We could allow incompatible flags values if the externally-defined
-substitutions with different flag values weren't *used*. However, this
-would create a surprise when trying to use the substitutions later.
-If that's necessary, split up the rules, or choose a consistent
-flags setting to use.
-
-To reduce unnecessary incompatibilities, we'll require that a flags value
-with comma-separated values list them alphabetically.
+Externally-visible substitutions should be documented so that the
+correct flags will be used for them.
 
 ## "ALL" tool
 
@@ -383,7 +341,7 @@ Something like:
 ...
 [test.1.hit]
 tool_name: Bash
-tool_input.command: sudo\nrm -rf /
+tool_input.command: /sudo\nrm -rf \//
 ~~~~
 
 Similarly, we want people to be able to test individual named
@@ -403,29 +361,3 @@ to create values that end in newlines, spaces, and so on.
 1 = foo.pdf
 2 = A grand\r\nold "time"
 ~~~~
-
-## JSONL
-
-We currently use a custom JSON-like format for logging.
-
-Let's switch to JSONL instead. Basically, you write JSON,
-one line per entry.
-
-Rationale:
-
-1. Fault tolerance: Crash during write? All previous entries still readable
-2. Streaming: Can process logs while they're being written
-3. Widely used: Used by ElasticSearch, many log processors.
-4. Simple: No need to manage array brackets or commas
-5. Performance: True append-only (no file rewrites)
-
-Let's also add timestamps:
-{"timestamp":"2025-...", request: {...}, response: {...}}
-
-For JSONL:
-
-- Official spec: https://jsonlines.org/
-- Also known as: JSON Lines, NDJSON (Newline Delimited JSON)
-- MIME type: application/jsonl or application/x-jsonl
-
-Usual file extension is .jsonl

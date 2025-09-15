@@ -334,7 +334,7 @@ Its class name is `FlexCheck` and it accepts a number of keyword
 options (all optional):
 
 * `perm_dirs`: List [str]. A list of permission directory paths.
-* `logfile`: str. A path to a file for logging
+* `logfile`: str. A path to a file for logging (in JSONL format)
 * `extra_dir`: str. A path to an "extra" permission directory to place second.
 * `debug: bool`. If true, generate debug info on stderr during rule processing.
 
