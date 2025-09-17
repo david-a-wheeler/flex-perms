@@ -7,7 +7,7 @@ permission control over Claude Code and perhaps other AI code assistants.
 
 Its permissions are defined in **permission directories** like `.claude/flex-perms/` (project-specific permissions) and `~/.claude/flex-perms/` (user-specific permissions for all projects), which are checked in order.  These contain optional subdirectories named `deny` (forbid this event), `ask` (ask for user permission), and `allow`. Each of these subdirectories can contain one or more **ToolName** directories for tools (like `WebFetch`, `Edit`, or `Bash`), and inside each tool directory are individual `NAME.rule` files defining specific rules. For example, `.claude/flex-perms/deny/Bash/sudo.rule`.
 
-Each `NAME.rule` file has a required `[info]` section and one or more `[clause.ID]` sections. Clauses contain one or more conditions in the form `field_path = Python_regex` (you don't need to quote the regular expressions, making them easy to use).
+Each `NAME.rule` file has a required `[info]` section and one or more `[clause.ID]` sections. Clauses contain one or more conditions in the form `field_path = pattern` where `pattern` is `/regex/flags` (the flags are optional).
 
 Each permission directory is checked in turn. In each permission directory, the rules in `deny` are checked first, then `ask`, then `allow`. Within a rule, a rule matches if any of its clauses match ("OR" semantics), and a clause matches if all its conditions match ("AND" semantics).
 
@@ -148,7 +148,11 @@ If you don't use `^`, `$`, or `\Z`, it will match anywhere in the input.
 
 Again, the `value` in a condition is a Python regular expression (regex)
 that describes the text pattern to match.
-Don't quote them with `"`; a `"` matches itself.
+It begins with `/` and ends with `/` followed optionally by flag characters.
+
+Details are described in the
+[Python3 re library](https://docs.python.org/3/library/re.html), but
+here's a quick summary.
 
 In a regular expression pattern,
 a letter or digit matches itself.
@@ -161,42 +165,30 @@ to match a literal dot.
 You can use options like `(AA|BB|CC)` to match `AA`, `BB`, or `CC`.
 If you don't use `^`, `$`, or `\Z`, it will match anywhere in the input.
 
-### Regular expression flags
+Here are the flags, with their longnames and descriptions:
 
-By default a regex rule uses the default Python regular expression `re` rules.
-If you set `info` section key `flags`, you change the interpretation
-for this entire rul.
-The `flags` value is a comma-separated list of re flag modifiers;
-any whitespace around commas is ignored.
-You can use the short or longnames, your choice.
-
-Here are some useful ones, as described by the
-[Python3 re library](https://docs.python.org/3/library/re.html).
-We give the longname first and the shortname in parentheses.
-You can use either, but we recommend using the longname:
-
-* ASCII (A): Make `\w`, `\W`, `\b`, `\B`, `\d`, `\D`, `\s` and `\S`
+* a - ASCII: Make `\w`, `\W`, `\b`, `\B`, `\d`, `\D`, `\s` and `\S`
   perform ASCII-only matching instead of full Unicode matching.
-* IGNORECASE (I): Perform case-insensitive matching; expressions like
+*  - IGNORECASE: Perform case-insensitive matching; expressions like
   [A-Z] will also match lowercase letters. Full Unicode matching (such
   as Ü matching ü) also works unless the ASCII flag is used to disable
   non-ASCII matches.
-* MULTILINE (M): When specified, the pattern character '^' matches at the
+* m - MULTILINE: When specified, the pattern character '^' matches at the
   beginning of the string and at the beginning of each line (immediately
   following each newline); and the pattern character '$' matches at the end
   of the string and at the end of each line (immediately preceding each
   newline). By default, '^' matches only at the beginning of the string,
   and '$' only at the end of the string and immediately before the newline
   (if any) at the end of the string.
-* DOTALL (S): Make the '.' special character match any character at all,
+* s - DOTALL: Make the '.' special character match any character at all,
   including a newline; without this flag, '.' will match anything except
   a newline.
-* VERBOSE (X): This flag allows you to write long regular expressions that
+* x - VERBOSE: This flag allows you to write long regular expressions that
   look nicer and are more readable by allowing you to visually separate
   logical sections of the pattern and add comments. Whitespace within the
   pattern is ignored, except when in a character class, or when preceded by
-  an unescaped backslash, or within tokens like *?, (?: or (?P<...>. For
-  example, (? : and * ? are not allowed. When a line contains a # that is
+  an unescaped backslash, or within tokens like `*?`, `(?:` or `(?P<...>`.
+  For example, `(?:` and `*?` are not allowed. When a line contains a # that is
   not in a character class and is not preceded by an unescaped backslash,
   all characters from the leftmost such # through the end of the line
   are ignored.
@@ -318,13 +310,12 @@ The following are other special capabilities not usually needed.
 | **Permission Directory List** | Ordered list of permission directories consulted when evaluating a request. | |
 | **Rule** | A single `.rule` INI file containing an `[info]` section and 1+ `[clause]` sections. | `deny/WebFetch/malware.rule` |
 | **Policy** | The collection of decisions that would be made in the current context, based on the current permission directory list (in order). It represents the potential outcomes for events under the current configuration. Note that changing the current directory can change the active policy because some policies are project-specific. | “The policy indicates that WebFetch requests to `example.com` are denied, Bash commands matching `rm -rf` are asked for confirmation, and other edits are allowed.” |
-| **Info Section `[info]`** | Required section in a rule. Contains metadata about the rule. Must include `reason`. Optional: `author`, `description`, `timestamp`, `flags`. | `[info]`<br>reason = Block known malware<br>author = Alice<br>flags = IGNORECASE |
+| **Info Section `[info]`** | Required section in a rule. Contains metadata about the rule. Must include `reason`. Optional: `author`, `description`, `timestamp`. | `[info]`<br>reason = Block known malware<br>author = Alice |
 | **Clause `[clause.ID]`** | A named grouping of one or more conditions within a rule. OR semantics across clauses. | `[clause.length]`<br>min = ^.{8,128}$ |
 | **Condition** | Atomic key/value test inside a clause. AND semantics across conditions within a clause. Key is a field path, value is a Python regex. Optional negation with `!` in the key. | `!tool_input.url = ^https://example\.com/.*$` |
 | **Field Path** | A dot-separated path of names for JSON navigation; may include `?` after a name for optional fields. Case-sensitive. | `tool_input.file_path?` |
 | **Decision** | Outcome of evaluating a rule for an event: `deny`, `ask`, or `allow`, or `undecided`. | `deny` |
 | **Subsection ID** | Alphanumeric identifier for a clause. Optional; used as `[clause.ID]`. Must be unique within a rule. | `[clause.complexity]` |
-| **Regex Flags** | Settings applied to the conditions’ regex evaluations. Stored in `[info]` as `flags`. | `flags = IGNORECASE,VERBOSE` |
 
 ## Library
 
@@ -364,6 +355,21 @@ Here are some key points:
   anything in the JSON event.
 * You can analyze environment variables, but they must be expressly requested.
   This reduces the risk of unintentional leakage.
+
+## Random rationale
+
+### Requiring / in regex
+
+Every regex uses /.../FLAGS notation
+(where FLAGS can be empty).
+
+This is more flexible, as each use can decide on its own flags.
+It eliminates complications in how to deal with different flags.
+In addition, this would make it easier to add support for defining
+rules using the [lark](https://github.com/lark-parser/lark) parser later
+if we go that route.
+
+This does mean that `/` will need to be escaped, e.g., `\/`. That's unfortunate but really common in regex expressions.
 
 ## Possible future directions
 

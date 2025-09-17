@@ -2,8 +2,6 @@
 
 Here are proposed changes to the current system:
 
-* Remove `flags` key from `info` entirely, and change regex format
-  in clauses to use slashed regex notation `/.../FLAGS` instead.
 * "include". Identify rules to import.
   It loads the corresponding file(s) from the permission directories'
   `includes` directory.
@@ -19,30 +17,6 @@ Below is a proposed design, with commentary. I express this in
 present tense so we can use this text as documentation if we accept it.
 
 * * *
-
-## Switch to /.../FLAGS regex notation.
-
-The `[info]` section's `flags =` key will be removed.
-
-Every regex in the current setup (as part of a clause)
-will be rewritten to use /.../FLAGS notation
-(where FLAGS can be empty).
-
-This is more flexible, as each use can decide on its own flags.
-It eliminates complications in how to deal with different flags.
-In addition, this would make it easier to add support for defining
-rules using the [lark](https://github.com/lark-parser/lark) parser later
-if we go that route.
-
-For now, we'll require the first non-space character to be '/' which
-will immediately detect some errors.
-
-This does mean that `/` will need to be escaped, e.g., `\/`. That's unfortunate but really common in regex expressions.
-
-This is a backwards-incompatible notation change, but we're the only
-user and this is in the version 0.X series. Now is the time for
-backwards-incompatible changes. The file `transition.py` will implement
-this transition for us.
 
 ## Substitutions
 
