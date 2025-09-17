@@ -318,6 +318,15 @@ class FlexCheck:
 
         return reason, clauses
 
+    # Map of single-character regex flags to their corresponding re module constants
+    REGEX_FLAG_MAP = {
+        'i': re.IGNORECASE,
+        'm': re.MULTILINE,
+        's': re.DOTALL,
+        'x': re.VERBOSE,
+        'a': re.ASCII
+    }
+
     def parse_slashed_regex(self, pattern: str) -> Tuple[str, int]:
         """Parse /regex/flags format and return (regex, flags).
 
@@ -342,16 +351,8 @@ class FlexCheck:
         # Convert single-character flags to regex flags
         flags = 0
         for flag_char in flags_part:
-            if flag_char == 'i':
-                flags |= re.IGNORECASE
-            elif flag_char == 'm':
-                flags |= re.MULTILINE
-            elif flag_char == 's':
-                flags |= re.DOTALL
-            elif flag_char == 'x':
-                flags |= re.VERBOSE
-            elif flag_char == 'a':
-                flags |= re.ASCII
+            if flag_char in self.REGEX_FLAG_MAP:
+                flags |= self.REGEX_FLAG_MAP[flag_char]
             else:
                 raise ValueError(f"Unknown regex flag '{flag_char}' in pattern: {pattern}")
 
