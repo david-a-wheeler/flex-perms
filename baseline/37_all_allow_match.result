@@ -1,0 +1,17 @@
+test_name: 37_all_allow_match
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: ALL rule denying dangerous operations configtest/all-test/deny/ALL/dangerous.rule - clause 1 ()"
+  }
+}
+
+stdout_end
+log_start
+{"request":{"tool_name":"AnyTool","tool_input":{"file_path":"/path/to/safe.txt"}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: ALL rule denying dangerous operations configtest/all-test/deny/ALL/dangerous.rule - clause 1 ()"}}}
+log_end

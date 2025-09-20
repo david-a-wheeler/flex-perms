@@ -1,0 +1,5 @@
+[info]
+reason = Specific tool overrides ALL
+
+[clause.1]
+tool_input.operation? = /delete/

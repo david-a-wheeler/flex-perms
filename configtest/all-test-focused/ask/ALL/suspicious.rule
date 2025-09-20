@@ -1,0 +1,5 @@
+[info]
+reason = ALL ask rule for suspicious operations
+
+[clause.1]
+tool_input.domain? = /\.evil\.com/

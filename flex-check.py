@@ -503,15 +503,13 @@ class FlexCheck:
             self.debug_msg(f"Rule file {rule_path}: MALFORMED - {error_result}")
             return error_result
 
-    def regex_match_in_perm_dir(self, perm_dir: str, perm_type: str,
-                                perm_options: Dict, tool_name: str, json_input: str) -> Optional[str]:
-        """Match rule files in permission directory for tool and permission type.
+    def match_direct_rules(self, perm_dir: str, perm_type: str, tool_name: str, json_input: str) -> Optional[str]:
+        """Match rule files directly for a specific tool in a permission directory.
 
-        Returns: rule_file:match_details if match found, else None
+        Returns: match_details if match found, else None
         """
         rule_dir = os.path.join(perm_dir, perm_type, tool_name)
 
-        # Check for direct tool rules first
         if os.path.isdir(rule_dir):
             try:
                 rule_files = [f for f in os.listdir(rule_dir) if f.endswith('.rule')]
@@ -526,6 +524,18 @@ class FlexCheck:
                 if result := self.process_rule_file(rule_path, json_input):
                     return result
 
+        return None
+
+    def regex_match_in_perm_dir(self, perm_dir: str, perm_type: str,
+                                perm_options: Dict, tool_name: str, json_input: str) -> Optional[str]:
+        """Match rule files in permission directory for tool and permission type.
+
+        Returns: rule_file:match_details if match found, else None
+        """
+        # Check for direct tool rules first
+        if result := self.match_direct_rules(perm_dir, perm_type, tool_name, json_input):
+            return result
+
         # Check for multi-tool rules using "see" key
         if "see" in perm_options and isinstance(perm_options["see"], dict):
             see_dict = perm_options["see"]
@@ -538,7 +548,7 @@ class FlexCheck:
 
         # Check for ALL pseudo-tool rules (only if not already checking ALL)
         if tool_name != "ALL":
-            if result := self.regex_match_in_perm_dir(perm_dir, perm_type, perm_options, "ALL", json_input):
+            if result := self.match_direct_rules(perm_dir, perm_type, "ALL", json_input):
                 return result
 
         return None

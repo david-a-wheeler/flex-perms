@@ -1,0 +1,17 @@
+test_name: 38_all_no_match_defer
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: ALL deny rule for specific pattern configtest/all-test-focused/deny/ALL/specific.rule - clause 1 ()"
+  }
+}
+
+stdout_end
+log_start
+{"request":{"tool_name":"NoMatchTool","tool_input":{"data":"unmatched"}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: ALL deny rule for specific pattern configtest/all-test-focused/deny/ALL/specific.rule - clause 1 ()"}}}
+log_end

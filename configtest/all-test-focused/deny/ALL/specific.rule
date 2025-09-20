@@ -1,0 +1,5 @@
+[info]
+reason = ALL deny rule for specific pattern
+
+[clause.1]
+tool_input.operation? = /delete/

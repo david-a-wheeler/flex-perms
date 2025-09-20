@@ -1,0 +1,17 @@
+test_name: 35_all_deny_match
+exit_code: 0
+stdout_start
+{
+  "continue": false,
+  "stopReason": "flex-perms: Request blocked by deny rule",
+  "hookSpecificOutput": {
+    "hookEventName": "PreToolUse",
+    "permissionDecision": "deny",
+    "permissionDecisionReason": "Access blocked by security policy - matched rule: ALL deny rule for specific pattern configtest/all-test-focused/deny/ALL/specific.rule - clause 1 (tool_input.operation?:delete files)"
+  }
+}
+
+stdout_end
+log_start
+{"request":{"tool_name":"RandomTool","tool_input":{"operation":"delete files"}},"response":{"continue":false,"stopReason":"flex-perms: Request blocked by deny rule","hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Access blocked by security policy - matched rule: ALL deny rule for specific pattern configtest/all-test-focused/deny/ALL/specific.rule - clause 1 (tool_input.operation?:delete files)"}}}
+log_end

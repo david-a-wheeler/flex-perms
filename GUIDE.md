@@ -5,7 +5,7 @@
 The `flex-perms` system enables people to easily implement fine-grained
 permission control over Claude Code and perhaps other AI code assistants.
 
-Its permissions are defined in **permission directories** like `.claude/flex-perms/` (project-specific permissions) and `~/.claude/flex-perms/` (user-specific permissions for all projects), which are checked in order.  These contain optional subdirectories named `deny` (forbid this event), `ask` (ask for user permission), and `allow`. Each of these subdirectories can contain one or more **ToolName** directories for tools (like `WebFetch`, `Edit`, or `Bash`), and inside each tool directory are individual `NAME.rule` files defining specific rules. For example, `.claude/flex-perms/deny/Bash/sudo.rule`.
+Its permissions are defined in **permission directories** like `.claude/flex-perms/` (project-specific permissions) and `~/.claude/flex-perms/` (user-specific permissions for all projects), which are checked in order.  These contain optional subdirectories named `deny` (forbid this event), `ask` (ask for user permission), and `allow`. Each of these subdirectories can contain one or more **ToolName** directories for tools (like `WebFetch`, `Edit`, or `Bash`), and inside each tool directory are individual `NAME.rule` files defining specific rules. For example, `.claude/flex-perms/deny/Bash/sudo.rule`. There's also a special **ALL** pseudo-tool for rules that apply to any tool that doesn't have specific matching rules.
 
 Each `NAME.rule` file has a required `[info]` section and one or more `[clause.ID]` sections. Clauses contain one or more conditions in the form `field_path = pattern` where `pattern` is `/regex/flags` (the flags are optional).
 
@@ -59,7 +59,7 @@ rule files:
 Where:
 
 - `{PERM}` is the permission type: `deny`, `ask`, or `allow`
-- `{TOOL}` is the Claude Code tool name (WebFetch, Edit, Write, Bash, etc.)
+- `{TOOL}` is the Claude Code tool name (WebFetch, Edit, Write, Bash, etc.) or the special pseudo-tool `ALL`
 - `{NAME}` is a user-chosen descriptive name
 - `.rule` suffix indicates a rule definition
 
@@ -78,6 +78,8 @@ When using a permissions directory, the rules are applied in order:
   requiring user confirmation.
 
 Note the precedence order: `deny`, then `ask`, then `allow`.
+
+Within each permission type, tool-specific rules are checked first, then "see" references (transitively), then `ALL` pseudo-tool rules.
 
 ### Rule files
 
@@ -223,6 +225,40 @@ pseudo-tool named `FileAccess`.:
 
 This can be followed to arbitrary levels, but avoid cycles.
 
+#### The "ALL" pseudo-tool
+
+Sometimes you want to define a pattern and apply it across *many* tools in an easy way.
+
+The system supports a pseudo-tool named "ALL" that provides rules which are applied to all tools that don't have specific matching rules. After checking the rules for a tool and all "see" groups (transitively), the system will try the rules for the pseudo "ALL" tool. Rules for the ALL tool are checked if all the other tool-specific rules don't have a match.
+
+**Directory structure:**
+```
+{PERM}/ALL/{NAME}.rule
+```
+
+Where `{PERM}` is `deny`, `ask`, or `allow`, and `{NAME}` is your chosen descriptive name.
+
+**Example:**
+To deny dangerous operations across all tools, create:
+```
+deny/ALL/dangerous.rule
+```
+
+```ini
+[info]
+reason = Block dangerous operations across all tools
+
+[clause.1]
+tool_input.command? = /rm.*-rf/
+
+[clause.2]
+tool_input.operation? = /delete.*all/
+```
+
+Note that conditions in ALL rules will often need to use `?` (optional field syntax) since different tools have different field structures. For example, `tool_input.url?` for web-related tools, `tool_input.command?` for command-line tools, etc.
+
+**Precedence:** Tool-specific rules are always checked before ALL rules. If a tool has its own matching rule, the ALL rules for that permission type are not checked.
+
 #### Support in rules for environment variable matching
 
 You can inject selected environment variables into rules for dynamic security policies. This is useful for environment-specific configurations while maintaining security by only exposing explicitly listed variables.
@@ -316,6 +352,7 @@ The following are other special capabilities not usually needed.
 | **Field Path** | A dot-separated path of names for JSON navigation; may include `?` after a name for optional fields. Case-sensitive. | `tool_input.file_path?` |
 | **Decision** | Outcome of evaluating a rule for an event: `deny`, `ask`, or `allow`, or `undecided`. | `deny` |
 | **Subsection ID** | Alphanumeric identifier for a clause. Optional; used as `[clause.ID]`. Must be unique within a rule. | `[clause.complexity]` |
+| **ALL Pseudo-tool** | Special tool directory named "ALL" containing rules that apply to all tools after tool-specific and "see" rules are checked. | `deny/ALL/dangerous.rule` |
 
 ## Library
 
@@ -382,10 +419,6 @@ This might in future gain:
   substitutions. Before processing a regular expression, the substitutions
   are applied in order. This enables use of predefined regular expressions
   in larger expressions.
-* "ALL" tool. After trying out the rules for a tool and its "see" groups,
-  try out rules for the pseudo ALL tool. Rules here are *always* tried.
-  Note that conditions in these rules
-  will often need to use `?`, e.g., `tool_input.url?`
 * "test". Add self-test clauses. E.g., `[test.NAME.hit]` if the test
   data should match this rule, and `[test.NAME.miss]` if it should not.
   We want people to be able to insert spaces, newlines, etc., so we'll

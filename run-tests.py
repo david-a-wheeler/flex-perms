@@ -312,6 +312,24 @@ TEST_CASES = [
         "tool_name": "Edit",
         "tool_input": {"file_path": "ExactCase"}
     }, {"FLEX_CHECK_PERM_DIRS": "configtest/test-flags"}),
+
+    # ALL pseudo-tool tests
+    ("35_all_deny_match", {
+        "tool_name": "RandomTool",
+        "tool_input": {"operation": "delete files"}
+    }, {"FLEX_CHECK_PERM_DIRS": "configtest/all-test-focused"}),
+    ("36_all_ask_match", {
+        "tool_name": "SomeTool",
+        "tool_input": {"domain": "hacker.evil.com"}
+    }, {"FLEX_CHECK_PERM_DIRS": "configtest/all-test-focused"}),
+    ("37_specific_overrides_all", {
+        "tool_name": "SpecificTool",
+        "tool_input": {"operation": "delete files"}
+    }, {"FLEX_CHECK_PERM_DIRS": "configtest/all-test-focused"}),
+    ("38_all_no_match_defer", {
+        "tool_name": "NoMatchTool",
+        "tool_input": {"data": "unmatched"}
+    }, {"FLEX_CHECK_PERM_DIRS": "configtest/all-test-focused"}),
 ]
 
 

@@ -68,7 +68,7 @@ Inside that are individual `NAME.rule` files defining a rule.
 An example of a rule file might be
 `.claude/flex-perms/deny/Bash/sudo.rule`.
 
-Each permission directory is checked in turn. In each permission directory, the rules in `deny` are checked first, then `ask`, then `allow`. Within a rule, a rule matches if any of its clauses match ("OR" semantics), and a clause matches if all its conditions match ("AND" semantics).
+Each permission directory is checked in turn. In each permission directory, the rules in the `deny` subdirectory are checked first, then `ask` subdirectory, then `allow` subdirectory. Within those subdirectories, the rules for the tool are tried, then the rules for "see also" tools, and the rules for the "ALL" tool. Within a rule, a rule matches if any of its clauses match ("OR" semantics), and a clause matches if all its conditions match ("AND" semantics).
 
 ## Installing
 
