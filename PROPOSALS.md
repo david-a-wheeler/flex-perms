@@ -2,8 +2,12 @@
 
 Here are proposed changes to the current system:
 
-* "ALL" tool. A pseudo-tool named ALL; rules for ALL are *always* tried
-  after the "see" options.
+* Running server instead of restart each time.
+  When debugging, restart each time is fine, but for performance, each
+  user should run their own server so that they don't have to recalculate
+  patterns every time. We need to implement this. NOTE: You do *NOT* want
+  to have 1 server doing it for all, because that server would need access
+  to each user's files.
 * "include". Identify rules to import.
   It loads the corresponding file(s) from the permission directories'
   `includes` directory.
