@@ -536,6 +536,11 @@ class FlexCheck:
                         if result := self.regex_match_in_perm_dir(perm_dir, perm_type, perm_options, other_tool_name, json_input):
                             return result
 
+        # Check for ALL pseudo-tool rules (only if not already checking ALL)
+        if tool_name != "ALL":
+            if result := self.regex_match_in_perm_dir(perm_dir, perm_type, perm_options, "ALL", json_input):
+                return result
+
         return None
 
     def inject_env_vars(self, json_input: str, env_var_names: List[str]) -> str:
