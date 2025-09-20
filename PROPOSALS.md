@@ -16,6 +16,7 @@ Here are proposed changes to the current system:
   are applied in order. This enables use of predefined regular expressions
   in larger expressions.
 * Self-test sections.
+* Possibly add support for lark
 
 Below is a proposed design, with commentary. I express this in
 present tense so we can use this text as documentation if we accept it.
@@ -349,3 +350,23 @@ to create values that end in newlines, spaces, and so on.
 1 = foo.pdf
 2 = A grand\r\nold "time"
 ~~~~
+
+## Add sophisticated parsing (lark)
+
+So far this tool has focused on using regexes, which are capable of doing
+many things.
+However, regexes can't easily manage balancing components (like
+open and close parentheses), and can be hard when they're complex.
+
+A solution would be adding a more sophisticated parser for optional use.
+The most likely is the [lark](https://github.com/lark-parser/lark) parser.
+
+Pros:
+
+* Enables far more sophisticated rules
+
+Cons:
+
+* Requires external library, making installation & maintenance harder
+* Longer start-up time *requires* implementing as a server for real-world use
+* More code, more to document; more complexity is good to resist.
