@@ -18,21 +18,6 @@ present tense so we can use this text as documentation if we accept it.
 
 * * *
 
-## "ALL" tool
-
-Sometimes you want to define a pattern and apply it across *many*
-tools, in an easy way.
-
-Proposed solution: a pseudo "ALL" tool (a tool subdirectory named "ALL"
-for each possible decision).
-After trying out the rules for a tool and *all* "see" groups (transitively),
-the system will try the rules for the pseudo ALL tool. Rules for the ALL tool
-are *always* tried if all the other tools don't have a match.
-
-Note that conditions in these rules
-will often need to use `?`. At least `tool_input.url?` and maybe
-`tool_input?.url?` (not sure which).
-
 ## Substitutions
 
 A rule file can define substitutions.
