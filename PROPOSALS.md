@@ -2,6 +2,8 @@
 
 Here are proposed changes to the current system:
 
+* "ALL" tool. A pseudo-tool named ALL; rules for ALL are *always* tried
+  after the "see" options.
 * "include". Identify rules to import.
   It loads the corresponding file(s) from the permission directories'
   `includes` directory.
@@ -9,14 +11,27 @@ Here are proposed changes to the current system:
   substitutions. Before processing a regular expression, the substitutions
   are applied in order. This enables use of predefined regular expressions
   in larger expressions.
-* "ALL" tool. A pseudo-tool named ALL; rules for ALL are *always* tried
-  after the "see" options.
 * Self-test sections.
 
 Below is a proposed design, with commentary. I express this in
 present tense so we can use this text as documentation if we accept it.
 
 * * *
+
+## "ALL" tool
+
+Sometimes you want to define a pattern and apply it across *many*
+tools, in an easy way.
+
+Proposed solution: a pseudo "ALL" tool (a tool subdirectory named "ALL"
+for each possible decision).
+After trying out the rules for a tool and *all* "see" groups (transitively),
+the system will try the rules for the pseudo ALL tool. Rules for the ALL tool
+are *always* tried if all the other tools don't have a match.
+
+Note that conditions in these rules
+will often need to use `?`. At least `tool_input.url?` and maybe
+`tool_input?.url?` (not sure which).
 
 ## Substitutions
 
@@ -298,21 +313,6 @@ already included on a particular branch. This prevents circular dependencies
 from causing an infinite loop. There's a limited number of files, and
 generally only files in `includes/` will be included, so there's no need to
 limit the depth count as well.
-
-## "ALL" tool
-
-Sometimes you want to define a pattern and apply it across *many*
-tools, in an easy way.
-
-Proposed solution: a pseudo "ALL" tool (a tool subdirectory named "ALL"
-for each possible decision).
-After trying out the rules for a tool and *all* "see" groups (transitively),
-the system will try the rules for the pseudo ALL tool. Rules for the ALL tool
-are *always* tried if all the other tools don't have a match.
-
-Note that conditions in these rules
-will often need to use `?`. At least `tool_input.url?` and maybe
-`tool_input?.url?` (not sure which).
 
 ## Self-test support
 
