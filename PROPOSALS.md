@@ -69,9 +69,12 @@ The key and resulting processed regex is then appended to the list of
 section, the key/value pair is
 also appended to the "current external substitutions".
 
-"Regex processing" takes a regex and applying the substitutions, in
-current local substitutions list, in *reverse* order
-(most recently defined backwards).
+"Regex processing" takes a regex and applies the substitutions from the
+current local substitutions list in *reverse* order
+(most recently defined first).
+This application order is different from the definition order:
+substitutions are *defined* in file order (first to last),
+but *applied* in reverse order (last to first).
 Note that this means that local substitutions can use substitution patterns
 previously processed, even in `substitutions.external` sections, since the
 current local substitutions list includes all substitutions in the
@@ -105,13 +108,16 @@ optional third `.ID` parameter. If we allowed only `substitutions` then
 it wouldn't be obvious if the second parameter `external` was making it
 external or was a section with ID of `external`.
 
-Rationale: We use "reverse order" of currently-active substitutions so that
-if there is a `FILE` definition, and a later definition of `FILES` that uses
-FILE, a reference to `FILES` will not accidentally use `FILE` instead.
-We could do "longest key first" but I fear that might be confusing and
-lead to unexpected matches. The substitutions most recently added
-will also tend to be closest to their uses, and are more likely to be
-what was intended.
+Rationale: We use "reverse order" of currently-active substitutions to prevent
+substring collision issues. For example, if there is a `FILE` definition,
+and a later definition of `FILES` that uses `FILE`, applying substitutions
+in reverse order ensures that `FILES` matches before `FILE` when
+processing regex patterns. Without this, a reference to `FILES` in a regex
+might accidentally match only the `FILE` portion, leading to incorrect
+substitution results. We could use "longest key first" matching instead,
+but reverse order is simpler to implement and understand: the substitutions
+most recently defined tend to be closest to their uses and more specific,
+making them more likely to be what was intended.
 
 Rationale: We do regex processing of substitutions as we read them in,
 not later when the conditions are applied. That way, if a substitution
@@ -132,19 +138,19 @@ Here's an example, which matches a chmod command with one or more files,
 as well a cp command with exactly two files:
 
 ~~~~ini
-[substitutions]
-$(FILE) = [A-Za-z0-9.,_-/]+
-$[FILES] = $(FILE)([ \t]+$(FILE))*
-SMILEY = :-\)
+[substitutions.local]
+${{FILE}} = [A-Za-z0-9.,_-/]+
+${{FILES}} = ${{FILE}}([ \t]+${{FILE}})*
+${{SMILEY}} = :-\)
 
 [clause.1]
-tool_input.command = /^chmod[ \t]+[ugo=+-rwx0-9]+[ \t]+$[FILES]$/
+tool_input.command = /^chmod[ \t]+[ugo=+-rwx0-9]+[ \t]+${{FILES}}$/
 
 [clause.2]
-tool_input.command = /^cp[ \t]+$(FILE)[ \t]+$(FILE)$/
+tool_input.command = /^cp[ \t]+${{FILE}}[ \t]+${{FILE}}$/
 
 [clause.3]
-tool_input.command = /^echo[ \t].*SMILEY/
+tool_input.command = /^echo[ \t].*${{SMILEY}}/
 ~~~~
 
 ### Substitution design notes
@@ -163,8 +169,10 @@ tool_input.command = /^echo[ \t].*SMILEY/
   A downside of substituting as-we-go is that we can't easily see the
   "underlying" pattern during debugging - all processed values are pre-expanded.
 
-The substitution keys are processed in reverse order (last first), so
-later substitution definitions can use earlier ones.
+When applying substitutions to regex patterns, the substitution keys are
+processed in reverse order (most recently defined first). This prevents
+substring matching issues and allows later substitution definitions to
+use earlier ones without conflicts.
 
 To prevent hard-to-find errors:
 
@@ -180,12 +188,14 @@ To prevent hard-to-find errors:
   That means we can't detect misspelled substitutions, but we don't
   expect that to be a serious problem, especially since this approach
   means the user doesn't have to create as many escapes.
-* When the substitution section is read in, each line is processed in order,
-  replacing all previous substitutions in their order. Then, when a
-  condition is processed, all of the existing substitutions are replaced.
+* When the substitution section is read in, each line is processed in
+  definition order (first to last), with each substitution's value having
+  all previously-defined substitutions applied to it. Then, when a
+  condition regex is processed, all existing substitutions are applied
+  in reverse order (most recently defined first).
   This means later substitutions can reuse earlier ones, but
-  not the other way around and there's no endless looping.
-  I think this gives the most "natural" approach when combined with
+  not the other way around, preventing endless looping.
+  This approach provides predictable behavior when combined with
   include files.
 * Each substitution value must *itself* be a legal regular expression
   after applying all the later defined substitutions defined after it
@@ -228,7 +238,7 @@ Here is an example:
 # File includes/file.rule
 
 # Substitutions have NO special substitution syntax, the %..% is arbitrary
-[substitutions]
+[substitutions.external]
 %FILE% = [A-Za-z0-9.,_-/]+
 
 # File includes/files.rule
@@ -238,7 +248,7 @@ includes = file.rule
 
 # Substitutions have NO special substitution syntax. Notice we use
 # $..$ here and %..% in another.
-[substitutions]
+[substitutions.local]
 $FILES$ = %FILE%([ \t]+%FILE%)*
 
 [clause.1]
@@ -335,7 +345,7 @@ to create values that end in newlines, spaces, and so on.
 
 ~~~~ini
 ...
-[nametest.${FILE}.hit]
+[nametest.${{FILE}}.hit]
 1 = foo.pdf
 2 = A grand\r\nold "time"
 ~~~~
